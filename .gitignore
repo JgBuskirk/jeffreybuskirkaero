@@ -3,3 +3,6 @@ Thumbs.db
 *.tmp
 .~lock.*#
 thumbs/
+
+# Local Netlify folder
+.netlify
