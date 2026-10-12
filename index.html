@@ -400,8 +400,10 @@ footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:v
       <p class="proj-sub">As <span class="accent">Chief Engineer</span>, I'm now leading a rocket that's
         smaller than Sonoran Wildcat and Jeb but far more technically ambitious: a ground-up, fully
         student-designed N₂O/E98 liquid rocket — regeneratively-cooled chamber, pintle injector, and a Rao
-        bell nozzle, developed with my own analysis and CFD tooling. Currently in final design ahead of
-        PDR, with test plans in work and machining starting soon.</p>
+        bell nozzle, developed with my own analysis and CFD tooling. The regen chamber is WREC's first
+        additively-manufactured (LPBF) engine, designed for an invite-only Freeform metal-printing
+        challenge. We presented it at our Propulsion &amp; GSE PDR in September 2026; printing and the
+        hot-fire campaign are scheduled for Spring 2027.</p>
       <div class="fig" style="margin:22px 0;max-width:640px">
         <video src="assets/jeblite_regen_demo.mp4" controls muted playsinline preload="metadata"></video>
         <div class="fig-cap">// ANSYS Transient Thermal — simulated regen chamber wall-temperature over a burn</div>
@@ -418,7 +420,9 @@ footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:v
       </div>
       <div class="metric-row">
         <div class="metric"><div class="v">8:1</div><div class="k">target thrust-to-weight</div></div>
-        <div class="metric"><div class="v">600 lbf</div><div class="k">target max thrust</div></div>
+        <div class="metric"><div class="v">650 lbf</div><div class="k">target max thrust</div></div>
+        <div class="metric"><div class="v">60</div><div class="k">printed coolant channels</div></div>
+        <div class="metric"><div class="v">3.6 MW/m²</div><div class="k">peak heat flux</div></div>
         <div class="metric"><div class="v">N₂O / E98</div><div class="k">propellants</div></div>
         <div class="metric"><div class="v">100%</div><div class="k">student-designed</div></div>
       </div>
@@ -448,6 +452,58 @@ footer{border-top:1px solid var(--line);padding:28px 0;text-align:center;color:v
         <figure class="figpanel"><img src="assets/regen_channels.png" alt="Cooling channel geometry">
           <figcaption class="cap">Regen: cooling-channel sizing</figcaption></figure>
       </div>
+
+      <!-- regen chamber PDR highlights -->
+      <h3 style="margin:40px 0 6px;font-size:1.25rem">Regen chamber: highlights from the PDR</h3>
+      <p class="proj-sub">Highlights from our regen chamber design review: hand calcs, then ANSYS, then a design
+        that can actually be printed.</p>
+      <div class="split">
+        <div class="fig">
+          <img src="assets/regen_transient_thermal.png" alt="ANSYS Transient Thermal temperature contour of the Jeb Lite regen chamber at burnout">
+          <div class="fig-cap">// ANSYS Transient Thermal: 510 °C peak wall temperature at burnout (t = 6.14 s), consistent with the Bartz hand calc</div>
+        </div>
+        <div class="fig">
+          <img src="assets/regen_coolant_cfd.png" alt="ANSYS Fluent static-pressure streamlines through the 60-channel regen cooling jacket">
+          <div class="fig-cap">// Fluent coolant-side CFD: E98 through all 60 channels, ~51 psi drop at 9 µm LPBF surface roughness</div>
+        </div>
+      </div>
+      <div class="grid-cards">
+        <div class="card"><h3><span class="k">E.</span> Bartz → ANSYS conjugate heat transfer</h3>
+          <p>Bartz hot-gas and Dittus–Boelter coolant correlations, sized station-by-station across 56 axial
+            stations (1&nbsp;mm channels, 0.3&nbsp;mm hot wall). The resulting heat-flux and convection profiles feed
+            ANSYS Transient Thermal as spatially varying boundary conditions. Counter-flow E98 coolant
+            enters at 32&nbsp;°C and leaves at 79&nbsp;°C.</p></div>
+        <div class="card"><h3><span class="k">F.</span> Coolant-side CFD</h3>
+          <p>3D CFD of the full 60-channel jacket shows what a 1D hand calc misses: channel-to-channel
+            maldistribution, hot spots at manifold turns, and the real pressure drop with as-printed
+            surface roughness. That pressure drop sets the tank and feed sizing.</p></div>
+        <div class="card"><h3><span class="k">G.</span> Thermal-structural FEA</h3>
+          <p>The temperature field from the thermal solve drives a Static Structural run with
+            temperature-dependent plasticity. Swapping an over-constrained fixed support for
+            frictionless/periodic constraints removed a non-physical 940&nbsp;MPa stress artifact.</p></div>
+        <div class="card"><h3><span class="k">H.</span> Pintle tip thermal</h3>
+          <p>The pintle has the harshest thermal environment in the engine: a 0.25&nbsp;in "dead zone" past the last
+            N₂O-cooled point, where Bartz scaling doesn't apply. A lumped transient model (τ&nbsp;≈&nbsp;4.9&nbsp;s)
+            bounds the tip at 340–550&nbsp;°C at burnout, cross-checked with ANSYS.</p></div>
+        <div class="card"><h3><span class="k">I.</span> Design for additive manufacturing</h3>
+          <p>The internal channels support themselves (overhangs &gt;45°), and feature sizes were checked
+            against the laser spot and powder size. Every passage has a powder-removal path. The design
+            was refined in a joint review with Freeform's engineers and will be CT-scanned after the
+            print.</p></div>
+        <div class="card"><h3><span class="k">J.</span> Test plan → Spring 2027</h3>
+          <p>Cold-flow with water and CO₂ to check flow rates, pressure drop and spray pattern. Then
+            static hot-fires instrumented with wall/coolant thermocouples, pressure transducers and a load
+            cell, followed by teardown to compare predicted and measured wall temperatures.</p></div>
+      </div>
+      <div class="figtrio" style="grid-template-columns:repeat(2,1fr)">
+        <figure class="figpanel"><img style="height:340px;object-fit:contain;background:#2b2b2b" src="assets/pintle_thermal.png" alt="ANSYS Transient Thermal temperature contour of the N2O-cooled pintle post">
+          <figcaption class="cap">Pintle: ANSYS Transient Thermal of the N₂O-cooled post</figcaption></figure>
+        <figure class="figpanel"><img style="height:340px;object-fit:contain;background:#8fa8d8" src="assets/regen_lpbf_build.png" alt="Regen chamber LPBF build-preparation mesh on the build plate">
+          <figcaption class="cap">LPBF build prep: chamber + jacket on the build plate</figcaption></figure>
+      </div>
+      <p style="margin-top:22px">
+        <a class="btn btn-sm" href="assets/WREC_Regen_Chamber_PDR.pdf" target="_blank">View the full regen chamber PDR ↗</a>
+      </p>
     </div>
   </div>
 </section>
